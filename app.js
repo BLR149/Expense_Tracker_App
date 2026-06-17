@@ -1331,7 +1331,7 @@ function parsePhonePeStatementFile() {
     // Simulate parsing delay for premium feel
     setTimeout(() => {
         // Fetch the parsed transaction list JSON directly from local server
-        fetch("/phonepe_statement_data.json")
+        fetch("phonepe_statement_data.json")
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Failed to load pre-parsed statement database");
