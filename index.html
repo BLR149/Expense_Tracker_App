@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SplitEase — Group Expense Tracker</title>
+    <meta name="description" content="SplitEase is a premium group expense tracker and bill splitter that helps you track shared costs, split bills, and settle debts easily.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Authentication Screen Overlay -->
+    <div class="auth-container" id="auth-screen">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo-area" style="justify-content: center; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <div class="logo-icon" style="color: var(--primary); background: var(--primary-glow); padding: 0.5rem; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
+                            <path d="M2 17L12 22L22 17"/>
+                            <path d="M2 12L12 17L22 12"/>
+                        </svg>
+                    </div>
+                    <h2 style="font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #fff 0%, var(--text-secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SplitEase</h2>
+                </div>
+                <h3 id="auth-title">Welcome Back</h3>
+                <p id="auth-subtitle">Log in to split bills and settle balances</p>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="form-login" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" placeholder="Enter username" required autocomplete="username" class="text-input" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 12px; width: 100%; display: block; margin-top: 0.35rem; color: white;">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required autocomplete="current-password" class="text-input" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 12px; width: 100%; display: block; margin-top: 0.35rem; color: white;">
+                </div>
+                <button type="submit" class="action-btn primary-btn auth-submit-btn">Log In</button>
+                <div class="auth-toggle-link">
+                    New to SplitEase? <a href="#" id="link-show-signup">Create an Account</a>
+                </div>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="form-signup" class="auth-form">
+                <div class="form-group">
+                    <label for="signup-username">Username</label>
+                    <input type="text" id="signup-username" placeholder="Choose username" required autocomplete="username" class="text-input" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 12px; width: 100%; display: block; margin-top: 0.35rem; color: white;">
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" placeholder="Create password" required autocomplete="new-password" class="text-input" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 0.8rem 1rem; border-radius: 12px; width: 100%; display: block; margin-top: 0.35rem; color: white;">
+                </div>
+                <div class="form-group">
+                    <label>Choose Avatar Glow Color</label>
+                    <div class="color-picker-grid" style="margin-top: 0.5rem;">
+                        <label class="color-swatch-wrapper">
+                            <input type="radio" name="signup-avatar-color" value="purple" checked>
+                            <span class="color-swatch purple-bg"></span>
+                        </label>
+                        <label class="color-swatch-wrapper">
+                            <input type="radio" name="signup-avatar-color" value="blue">
+                            <span class="color-swatch blue-bg"></span>
+                        </label>
+                        <label class="color-swatch-wrapper">
+                            <input type="radio" name="signup-avatar-color" value="teal">
+                            <span class="color-swatch teal-bg"></span>
+                        </label>
+                        <label class="color-swatch-wrapper">
+                            <input type="radio" name="signup-avatar-color" value="emerald">
+                            <span class="color-swatch emerald-bg"></span>
+                        </label>
+                        <label class="color-swatch-wrapper">
+                            <input type="radio" name="signup-avatar-color" value="amber">
+                            <span class="color-swatch amber-bg"></span>
+                        </label>
+                        <label class="color-swatch-wrapper">
+                            <input type="radio" name="signup-avatar-color" value="rose">
+                            <span class="color-swatch rose-bg"></span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="action-btn primary-btn auth-submit-btn">Sign Up & Log In</button>
+                <div class="auth-toggle-link">
+                    Already have an account? <a href="#" id="link-show-login">Log In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="app-container" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2>SplitEase</h2>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-btn active" id="btn-dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                    Dashboard
+                </button>
+                <button class="nav-btn" id="btn-expenses">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12"/><path d="M6 8h12"/><path d="m6 13 8.5 8"/><path d="M6 13h3a4 4 0 0 0 0-8"/></svg>
+                    Expenses
+                </button>
+                <button class="nav-btn" id="btn-users">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Group Members
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="quick-stats-card">
+                    <p class="qs-label">Total Shared Bill</p>
+                    <p class="qs-value" id="sidebar-total-amount">₹0.00</p>
+                </div>
+                <button class="action-btn primary-btn add-expense-trigger" id="sidebar-add-expense-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add Expense
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top bar -->
+            <header class="top-bar">
+                <div class="search-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="global-search" placeholder="Search expenses, members, categories...">
+                </div>
+                
+                <div class="user-actions">
+                    <button class="action-btn secondary-btn" id="btn-new-user-top">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/></svg>
+                        Add Member
+                    </button>
+                    <div class="logged-in-user-area" id="header-user-area">
+                        <div class="avatar-mini purple" id="header-user-avatar">IA</div>
+                        <span class="header-user-name" id="header-user-name">iam</span>
+                        <button class="logout-btn" id="btn-logout" title="Log Out">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable content -->
+            <div class="content-body">
+                <!-- VIEW 1: DASHBOARD -->
+                <section class="content-view active" id="view-dashboard">
+                    <div class="welcome-banner">
+                        <div class="banner-text">
+                            <h1>Track, Split, and Settle Up.</h1>
+                            <p>Seamlessly manage group payments and balance sheets without the headache.</p>
+                        </div>
+                        <div style="display: flex; gap: 0.75rem; align-items: center;">
+                            <button class="action-btn primary-btn add-expense-trigger">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Record Expense
+                            </button>
+                            <button class="action-btn phonepe-sync-trigger" id="btn-phonepe-sync-dashboard" style="display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #5f259f 0%, #7d3bc4 100%); border: none; box-shadow: 0 4px 12px rgba(95, 37, 159, 0.3); border-radius: 12px; padding: 0.75rem 1.25rem; font-weight: 600; cursor: pointer; color: white;">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="vertical-align: middle;">
+                                    <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                                </svg>
+                                Import PhonePe PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="metrics-grid">
+                        <div class="metric-card bg-gradient-1">
+                            <div class="metric-info">
+                                <span class="metric-label">Total Expenses</span>
+                                <h3 class="metric-value" id="dashboard-total-expenses">₹0.00</h3>
+                                <span class="metric-sub" id="dashboard-expense-count">0 transactions</span>
+                            </div>
+                            <div class="metric-icon-bg">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12"/><path d="M6 8h12"/><path d="m6 13 8.5 8"/><path d="M6 13h3a4 4 0 0 0 0-8"/></svg>
+                            </div>
+                        </div>
+                        <div class="metric-card bg-gradient-2">
+                            <div class="metric-info">
+                                <span class="metric-label">Group Size</span>
+                                <h3 class="metric-value" id="dashboard-group-size">0</h3>
+                                <span class="metric-sub" id="dashboard-active-users">Members sharing costs</span>
+                            </div>
+                            <div class="metric-icon-bg">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                            </div>
+                        </div>
+                        <div class="metric-card bg-gradient-3">
+                            <div class="metric-info">
+                                <span class="metric-label">Pending Settlements</span>
+                                <h3 class="metric-value" id="dashboard-pending-settlements">0</h3>
+                                <span class="metric-sub">Optimal transfers suggested</span>
+                            </div>
+                            <div class="metric-icon-bg">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 3H3v5M12 22V12M12 12L3 3M12 12l9-9"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Double Column Layout -->
+                    <div class="dashboard-grid">
+                        <!-- Left Panel: Settlements & Members -->
+                        <div class="dashboard-panel">
+                            <div class="panel-header">
+                                <h3>Suggested Settlements</h3>
+                                <span class="panel-badge highlight">Optimized</span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="settlements-list" id="settlements-container">
+                                    <!-- Dynamic content -->
+                                    <div class="empty-state">
+                                        <p>No settlements needed. Everyone is balanced!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Category Breakdown -->
+                        <div class="dashboard-panel">
+                            <div class="panel-header">
+                                <h3>Spending by Category</h3>
+                            </div>
+                            <div class="panel-body flex-center flex-column">
+                                <div class="chart-wrapper">
+                                    <svg class="donut-chart" id="category-donut-chart" viewBox="0 0 100 100">
+                                        <!-- Dynamic circles here -->
+                                        <circle cx="50" cy="50" r="40" fill="transparent" stroke="#1f2937" stroke-width="10"/>
+                                    </svg>
+                                    <div class="chart-center-label">
+                                        <span class="ccl-title">Total</span>
+                                        <span class="ccl-value" id="chart-total-value">₹0.00</span>
+                                    </div>
+                                </div>
+                                <div class="chart-legend" id="chart-legend-container">
+                                    <!-- Dynamic legend -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member Balances Board -->
+                    <div class="dashboard-panel full-width">
+                        <div class="panel-header">
+                            <h3>Standing Balances</h3>
+                            <button class="text-btn" id="btn-manage-members-link">View Details &rarr;</button>
+                        </div>
+                        <div class="panel-body">
+                            <div class="members-cards-grid" id="dashboard-members-grid">
+                                <!-- Dynamic member list cards -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 2: EXPENSES LIST -->
+                <section class="content-view" id="view-expenses">
+                    <div class="page-heading-area">
+                        <div>
+                            <h2>Ledger Expenses</h2>
+                            <p>Full history of tracked payments and settlements.</p>
+                        </div>
+                        <div class="filters-row">
+                            <select id="filter-description" class="select-input small-select" style="max-width: 180px;">
+                                <option value="all">All Descriptions</option>
+                            </select>
+                            <select id="filter-category" class="select-input small-select">
+                                <option value="all">All Categories</option>
+                                <option value="Food">Food & Dining</option>
+                                <option value="Travel">Travel & Lodging</option>
+                                <option value="Rent">Rent & Bills</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Settlement">Settlements</option>
+                                <option value="Others">Others</option>
+                            </select>
+                            <select id="filter-group-by" class="select-input small-select" style="max-width: 150px;">
+                                <option value="none">No Grouping</option>
+                                <option value="category">Group by Category</option>
+                                <option value="payer">Group by Paid By</option>
+                                <option value="date">Group by Date</option>
+                                <option value="description">Group by Description</option>
+                                <option value="type">Group by Credit & Debit</option>
+                            </select>
+                            <button class="action-btn phonepe-sync-trigger" id="btn-phonepe-sync-ledger" style="display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #5f259f 0%, #7d3bc4 100%); border: none; box-shadow: 0 4px 12px rgba(95, 37, 159, 0.3); border-radius: 12px; padding: 0.6rem 1rem; font-weight: 600; cursor: pointer; color: white;">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align: middle;">
+                                    <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                                </svg>
+                                Import PhonePe PDF
+                            </button>
+                            <button class="action-btn primary-btn add-expense-trigger">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Add Expense
+                            </button>
+                            <button class="action-btn danger-btn" id="btn-clear-expenses">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                Delete All
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="expenses-table" id="expenses-table">
+                            <thead>
+                                <tr>
+                                    <th>Expense Description</th>
+                                    <th>Category</th>
+                                    <th>Paid By</th>
+                                    <th>Split Participants</th>
+                                    <th>Total Cost</th>
+                                    <th>Date</th>
+                                    <th class="actions-col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenses-tbody">
+                                <!-- Dynamic row injection -->
+                            </tbody>
+                        </table>
+                        <div class="table-empty-state hidden" id="expenses-empty-state">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <p>No expenses logged matching the criteria. Start by adding one!</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 3: MEMBERS MANAGEMENT -->
+                <section class="content-view" id="view-users">
+                    <div class="page-heading-area">
+                        <div>
+                            <h2>Group Members</h2>
+                            <p>Add and view details of all active participants in the expense group.</p>
+                        </div>
+                        <button class="action-btn primary-btn" id="btn-add-member-view">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Add New Member
+                        </button>
+                    </div>
+
+                    <div class="members-large-grid" id="members-list-container">
+                        <!-- Dynamic member detail cards -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL 1: ADD USER -->
+    <div class="modal-overlay" id="modal-add-user">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Add Group Member</h3>
+                <button class="modal-close" id="btn-close-user-modal">&times;</button>
+            </div>
+            <form id="form-add-user">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="new-username">Member's Name</label>
+                        <input type="text" id="new-username" placeholder="e.g. Rachel, Monica, Joey" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Choose Avatar Glow Color</label>
+                        <div class="color-picker-grid">
+                            <label class="color-swatch-wrapper">
+                                <input type="radio" name="avatar-color" value="purple" checked>
+                                <span class="color-swatch purple-bg"></span>
+                            </label>
+                            <label class="color-swatch-wrapper">
+                                <input type="radio" name="avatar-color" value="blue">
+                                <span class="color-swatch blue-bg"></span>
+                            </label>
+                            <label class="color-swatch-wrapper">
+                                <input type="radio" name="avatar-color" value="teal">
+                                <span class="color-swatch teal-bg"></span>
+                            </label>
+                            <label class="color-swatch-wrapper">
+                                <input type="radio" name="avatar-color" value="emerald">
+                                <span class="color-swatch emerald-bg"></span>
+                            </label>
+                            <label class="color-swatch-wrapper">
+                                <input type="radio" name="avatar-color" value="amber">
+                                <span class="color-swatch amber-bg"></span>
+                            </label>
+                            <label class="color-swatch-wrapper">
+                                <input type="radio" name="avatar-color" value="rose">
+                                <span class="color-swatch rose-bg"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="action-btn secondary-btn" id="btn-cancel-user-modal">Cancel</button>
+                    <button type="submit" class="action-btn primary-btn">Add Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: ADD/EDIT EXPENSE -->
+    <div class="modal-overlay" id="modal-add-expense">
+        <div class="modal-card modal-large">
+            <div class="modal-header">
+                <h3 id="expense-modal-title">Record New Expense</h3>
+                <button class="modal-close" id="btn-close-expense-modal">&times;</button>
+            </div>
+            <form id="form-add-expense">
+                <div class="modal-body">
+                    <div class="modal-grid-2">
+                        <!-- Left Side: Basic Info -->
+                        <div class="modal-grid-section">
+                            <div class="form-group">
+                                <label for="expense-title">What was paid for?</label>
+                                <input type="text" id="expense-title" placeholder="e.g. Dinner, Taxi, Villa Booking" required autocomplete="off">
+                            </div>
+                            
+                            <div class="form-group-row">
+                                <div class="form-group">
+                                    <label for="expense-amount">Total Cost (₹)</label>
+                                    <input type="number" id="expense-amount" min="0.01" step="0.01" placeholder="0.00" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expense-category">Category</label>
+                                    <select id="expense-category" class="select-input" required>
+                                        <option value="Food">Food & Dining</option>
+                                        <option value="Travel">Travel & Lodging</option>
+                                        <option value="Rent">Rent & Bills</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Shopping">Shopping</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group-row">
+                                <div class="form-group">
+                                    <label for="expense-date">Date</label>
+                                    <input type="date" id="expense-date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expense-payer">Paid By</label>
+                                    <select id="expense-payer" class="select-input" required>
+                                        <!-- Active user options loaded dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Side: Split Distribution -->
+                        <div class="modal-grid-section split-distribution-section">
+                            <div class="split-section-header">
+                                <label>Split Settings</label>
+                                <div class="split-tabs">
+                                    <button type="button" class="split-tab-btn active" id="tab-split-equal">Equally</button>
+                                    <button type="button" class="split-tab-btn" id="tab-split-custom">Custom Share</button>
+                                </div>
+                            </div>
+
+                            <!-- Equal Split Panel -->
+                            <div class="split-panel active" id="panel-split-equal">
+                                <p class="split-instructions">Who shares in this expense? (Splits equally among selected members)</p>
+                                <div class="split-selection-list" id="split-checkboxes-container">
+                                    <!-- Dynamic list of members with checkboxes -->
+                                </div>
+                            </div>
+
+                            <!-- Custom Split Panel -->
+                            <div class="split-panel" id="panel-split-custom">
+                                <p class="split-instructions">Specify exact amount owed by each participant (must sum to total cost):</p>
+                                <div class="split-custom-list" id="split-custom-container">
+                                    <!-- Dynamic list of members with inputs -->
+                                </div>
+                                <div class="custom-split-summary">
+                                    <span>Remaining to split:</span>
+                                    <span class="split-remaining-val" id="split-remaining-label">₹0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="action-btn secondary-btn" id="btn-cancel-expense-modal">Cancel</button>
+                    <button type="submit" class="action-btn primary-btn" id="btn-save-expense">Save Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: CONFIRM SETTLEMENT -->
+    <div class="modal-overlay" id="modal-confirm-settlement">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Settle Debt Payment</h3>
+                <button class="modal-close" id="btn-close-settle-modal">&times;</button>
+            </div>
+            <form id="form-confirm-settlement">
+                <div class="modal-body">
+                    <div class="settle-bill-preview">
+                        <div class="settle-person debtor-side">
+                            <div class="settle-avatar" id="settle-debtor-avatar">JD</div>
+                            <span class="settle-name" id="settle-debtor-name">John</span>
+                            <span class="settle-sub">Payer</span>
+                        </div>
+                        <div class="settle-arrow-flow">
+                            <span class="settle-amount-display" id="settle-amount-display">₹0.00</span>
+                            <svg class="flow-arrow-svg" viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 10H90" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
+                                <path d="M85 5L95 10L85 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="settle-person creditor-side">
+                            <div class="settle-avatar" id="settle-creditor-avatar">AM</div>
+                            <span class="settle-name" id="settle-creditor-name">Anna</span>
+                            <span class="settle-sub">Recipient</span>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="settle-debtor-id">
+                    <input type="hidden" id="settle-creditor-id">
+                    <input type="hidden" id="settle-amount">
+
+                    <div class="form-group" style="margin-top: 1.5rem;">
+                        <label for="settle-date">Payment Date</label>
+                        <input type="date" id="settle-date" required>
+                    </div>
+                    <p class="settle-notice">Confirming will create a special transaction in the ledger representing this settlement payment, clearing the debt from your standing balances.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="action-btn secondary-btn" id="btn-cancel-settle-modal">Cancel</button>
+                    <button type="submit" class="action-btn primary-btn">Confirm Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 4: PHONEPE PDF IMPORT -->
+    <div class="modal-overlay" id="modal-phonepe">
+        <div class="modal-card modal-large phonepe-modal-card" style="border: 1px solid rgba(95, 37, 159, 0.3); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(95, 37, 159, 0.15); max-width: 650px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, rgba(95, 37, 159, 0.2) 0%, transparent 100%); border-bottom: 1px solid rgba(95, 37, 159, 0.2);">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="background: #5f259f; color: white; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem;">Pe</div>
+                    <h3 style="color: white; font-weight: 700;">PhonePe PDF Statement Importer</h3>
+                </div>
+                <button class="modal-close" id="btn-close-phonepe-modal">&times;</button>
+            </div>
+
+            <!-- STEP 1: UPLOAD FILE -->
+            <div class="phonepe-view active" id="phonepe-upload-view">
+                <div class="modal-body" style="padding: 2.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                    <div class="phonepe-brand-icon" style="background: rgba(95, 37, 159, 0.1); border: 2px solid rgba(95, 37, 159, 0.3); border-radius: 50%; width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; color: #7d3bc4; box-shadow: 0 0 20px rgba(95, 37, 159, 0.2);">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 1.25rem; font-weight: 600; color: white; margin-bottom: 0.5rem;">Import PhonePe PDF Statement</h4>
+                        <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto; font-size: 0.9rem; line-height: 1.4;">Select your exported PhonePe statement PDF to automatically extract and import transactions.</p>
+                    </div>
+
+                    <div style="width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
+                        <!-- File Upload Box -->
+                        <div class="pdf-upload-box" id="pdf-drop-zone" style="border: 2px dashed rgba(95, 37, 159, 0.3); background: rgba(255,255,255,0.01); border-radius: 16px; padding: 2rem; cursor: pointer; transition: background 0.2s, border-color 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <span id="pdf-upload-filename" style="color: white; font-weight: 500; font-size: 0.9rem;">Click to choose PDF or drag & drop</span>
+                            <span style="color: var(--text-muted); font-size: 0.75rem;">Supports PhonePe generated statements (.pdf)</span>
+                            <input type="file" id="phonepe-pdf-file" accept=".pdf" style="display: none;">
+                        </div>
+
+                        <!-- Auto fill suggestion -->
+                        <div style="background: rgba(95, 37, 159, 0.1); border: 1px solid rgba(95, 37, 159, 0.2); border-radius: 12px; padding: 0.75rem 1rem; font-size: 0.8rem; text-align: left; display: flex; align-items: flex-start; gap: 0.5rem;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #7d3bc4; flex-shrink: 0; margin-top: 0.1rem;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <span style="color: var(--text-secondary); line-height: 1.3;">Found matching local statement:<br><strong style="color: white; font-family: monospace;">PhonePe_Statement_May2026_Jun2026.pdf</strong><br><a href="#" id="link-autofill-pdf" style="color: #8b5cf6; text-decoration: underline; font-weight: 600;">Click here to auto-fill and parse it directly</a></span>
+                        </div>
+
+                        <button type="button" class="action-btn primary-btn" id="btn-phonepe-parse" disabled style="width: 100%; background: linear-gradient(135deg, #5f259f 0%, #7d3bc4 100%); border: none; box-shadow: 0 4px 12px rgba(95, 37, 159, 0.3); padding: 0.85rem; font-weight: 600; border-radius: 12px; color: white;">Parse & View Transactions</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: SHOW HISTORY LIST -->
+            <div class="phonepe-view" id="phonepe-history-view">
+                <div class="modal-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                        <div>
+                            <h4 style="font-size: 1.1rem; font-weight: 600; color: white;" id="phonepe-history-title">Extracted Transactions</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem;">Select transactions you want to import into your group ledger.</p>
+                        </div>
+                        <span id="phonepe-file-badge" style="font-size: 0.8rem; background: rgba(95, 37, 159, 0.15); border: 1px solid rgba(95, 37, 159, 0.3); color: #a78bfa; padding: 0.3rem 0.6rem; border-radius: 50px; font-weight: 500; font-family: monospace;">May2026_Jun2026.pdf</span>
+                    </div>
+
+                    <!-- Selection & Count Bar -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);" id="phonepe-tx-count-label">0 transactions found</span>
+                            <select id="phonepe-filter-type" class="select-input small-select" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: white; width: auto; max-width: 140px;">
+                                <option value="ALL">All Transactions</option>
+                                <option value="DEBIT">Paid (Debits)</option>
+                                <option value="CREDIT">Received (Credits)</option>
+                            </select>
+                        </div>
+                        <button type="button" id="btn-phonepe-select-all" style="font-size: 0.8rem; color: var(--primary); font-weight: 600; cursor: pointer; background: none; border: none; text-decoration: underline; padding: 0.25rem 0.5rem; border-radius: 4px; transition: color 0.2s;">Select All</button>
+                    </div>
+
+                    <!-- Scrollable Transaction List -->
+                    <div class="phonepe-transactions-list" id="phonepe-list">
+                        <!-- Injected dynamically -->
+                    </div>
+
+                    <!-- Global Config for Selected Imports -->
+                    <div class="phonepe-import-config" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                        <div class="form-group">
+                            <label style="font-size: 0.85rem; color: var(--text-secondary);">Default Paid By</label>
+                            <select id="phonepe-global-payer" class="select-input" style="width: 100%; background: rgba(0,0,0,0.2); margin-top: 0.35rem; border: 1px solid var(--border-color); color: white; padding: 0.5rem; border-radius: 8px;">
+                                <!-- Populate users dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 0.85rem; color: var(--text-secondary);">Split settings</label>
+                            <div style="margin-top: 0.6rem; font-size: 0.875rem; color: white;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="checkbox" id="phonepe-split-all-equal" checked style="accent-color: var(--primary);">
+                                    <span>Split equally among all active members</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="border-top: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                    <button type="button" class="action-btn secondary-btn" id="btn-phonepe-disconnect" style="color: var(--text-secondary); border-color: var(--border-color); background: rgba(255,255,255,0.02); padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer;">Back to Upload</button>
+                    <button type="button" class="action-btn primary-btn" id="btn-phonepe-import" style="background: linear-gradient(135deg, #5f259f 0%, #7d3bc4 100%); border: none; box-shadow: 0 4px 12px rgba(95, 37, 159, 0.3); font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 8px; color: white; cursor: pointer;">Import Selected (0)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
